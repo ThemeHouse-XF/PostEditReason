@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<addon addon_id="ThemeHouse_PostEditReason" title="[⌂] Post Edit Reason" version_string="1.0.0" version_id="1447261019" url="http://xf.themehouse.io" install_callback_class="ThemeHouse_Install" install_callback_method="install" uninstall_callback_class="ThemeHouse_Install" uninstall_callback_method="uninstall">
+  <admin_navigation/>
+  <admin_permissions/>
+  <admin_style_properties/>
+  <admin_templates/>
+  <admin_template_modifications/>
+  <code_events/>
+  <code_event_listeners>
+    <listener event_id="controller_pre_dispatch" execute_order="10" callback_class="ThemeHouse_Listener_ControllerPreDispatch" callback_method="controllerPreDispatch" active="1" hint="" description=""/>
+    <listener event_id="file_health_check" execute_order="10" callback_class="ThemeHouse_PostEditReason_Listener_FileHealthCheck" callback_method="fileHealthCheck" active="1" hint="" description=""/>
+    <listener event_id="init_dependencies" execute_order="10" callback_class="ThemeHouse_Listener_InitDependencies" callback_method="initDependencies" active="1" hint="" description=""/>
+    <listener event_id="load_class" execute_order="10" callback_class="ThemeHouse_PostEditReason_Listener_LoadClass" callback_method="loadClassController" active="0" hint="XenForo_ControllerPublic_Post" description="XenForo_ControllerPublic_Post (For XenForo 1.2 and above)" compatibility_switch="1"/>
+    <listener event_id="load_class" execute_order="10" callback_class="ThemeHouse_PostEditReason_Listener_LoadClass" callback_method="loadClassController" active="0" hint="XenForo_ControllerPublic_Thread" description="XenForo_ControllerPublic_Thread (For XenForo 1.2 and above)" compatibility_switch="1"/>
+    <listener event_id="load_class" execute_order="10" callback_class="ThemeHouse_PostEditReason_Listener_LoadClass" callback_method="loadClassDataWriter" active="0" hint="XenForo_DataWriter_DiscussionMessage_Post" description="XenForo_DataWriter_DiscussionMessage_Post (For XenForo 1.2 and above)" compatibility_switch="1"/>
+    <listener event_id="load_class_controller" execute_order="10" callback_class="ThemeHouse_PostEditReason_Listener_LoadClass" callback_method="loadClassController" active="1" hint="" description="(For XenForo 1.1 and below)" compatibility_switch="1"/>
+    <listener event_id="load_class_datawriter" execute_order="10" callback_class="ThemeHouse_PostEditReason_Listener_LoadClass" callback_method="loadClassDataWriter" active="1" hint="" description="(For XenForo 1.1 and below)" compatibility_switch="1"/>
+  </code_event_listeners>
+  <cron/>
+  <email_templates/>
+  <email_template_modifications/>
+  <optiongroups>
+    <group group_id="th_posteditreason" display_order="2000" debug_only="0"/>
+    <option option_id="th_editPostReason_excludedUserGroups" edit_format="callback" data_type="array" can_backup="1">
+      <default_value>a:0:{}</default_value>
+      <edit_format_params>ThemeHouse_PostEditReason_Option_UserGroupChooser::renderCheckbox</edit_format_params>
+      <sub_options>*</sub_options>
+      <relation group_id="th_posteditreason" display_order="10"/>
+    </option>
+    <option option_id="th_postEditReason_showUserLink" edit_format="onoff" data_type="boolean" can_backup="1">
+      <default_value>0</default_value>
+      <edit_format_params/>
+      <sub_options/>
+      <relation group_id="th_posteditreason" display_order="20"/>
+    </option>
+  </optiongroups>
+  <permissions>
+    <permission_groups/>
+    <permissions/>
+    <interface_groups/>
+  </permissions>
+  <phrases>
+    <phrase title="option_group_th_posteditreason" version_id="1412542746" version_string="1.0.0"><![CDATA[Post Edit Reason by ThemeHouse]]></phrase>
+    <phrase title="option_group_th_posteditreason_description" version_id="1412542746" version_string="1.0.0"><![CDATA[Options for the Post Edit Reason add-on by ThemeHouse.]]></phrase>
+    <phrase title="option_th_editPostReason_excludedUserGroups" version_id="1412542746" version_string="1.0.0"><![CDATA[Restricted User Groups]]></phrase>
+    <phrase title="option_th_editPostReason_excludedUserGroups_explain" version_id="1412542746" version_string="1.0.0"><![CDATA[Selected user groups will not see details of post edits.]]></phrase>
+    <phrase title="option_th_postEditReason_showUserLink" version_id="1412542746" version_string="1.0.0"><![CDATA[Show User Links]]></phrase>
+    <phrase title="option_th_postEditReason_showUserLink_explain" version_id="1412542746" version_string="1.0.0"><![CDATA[If selected a link to the editing user will be added if a post is edited.]]></phrase>
+    <phrase title="th_last_edited_by_posteditreason" version_id="1412542746" version_string="1.0.0"><![CDATA[Last edited by ]]></phrase>
+    <phrase title="th_post_edit_reason_posteditreason" version_id="1412542746" version_string="1.0.0"><![CDATA[Post edit reason]]></phrase>
+    <phrase title="th_reason_for_edit_posteditreason" version_id="1412542746" version_string="1.0.0"><![CDATA[Reason for edit]]></phrase>
+  </phrases>
+  <route_prefixes/>
+  <style_properties/>
+  <templates>
+    <template title="th_helper_edit_silent_posteditreason" version_id="1412542746" version_string="1.0.0"><![CDATA[<li>
+	<dt><label for="post_edit_reason_th">{xen:phrase th_post_edit_reason_posteditreason}:</label></dt>
+	<dd><input type="text" name="post_edit_reason_th" value="{$post.post_edit_reason_th}" id="post_edit_reason_th" class="textCtrl" style="width:500px;" /></dd> </li>
+</li>]]></template>
+    <template title="th_message_posteditreason" version_id="1412542746" version_string="1.0.0"><![CDATA[<xen:if is="{$xenOptions.th_postEditReason_showUserLink}">
+	<div class="editDate muted">
+		<xen:if is="{$message.user_id} == {$message.last_edit_user_id}">
+			{xen:phrase th_last_edited_by_posteditreason}<xen:username user="$post" class="author" />: <xen:datetime time="{$message.last_edit_date}" /><br/>
+			<xen:if is="{$post.post_edit_reason_th}">
+				{xen:phrase th_reason_for_edit_posteditreason}: {$post.post_edit_reason_th}
+			</xen:if>
+		<xen:else />
+			{xen:phrase th_last_edited_by_posteditreason}<xen:username user="$post.post_edit_user_th" class="author" />: <xen:datetime time="{$message.last_edit_date}" /><br/>
+			<xen:if is="{$post.post_edit_reason_th}">
+				{xen:phrase th_reason_for_edit_posteditreason}: {$post.post_edit_reason_th}
+			</xen:if>
+		</xen:if>
+	</div>
+<xen:else />
+	<div class="editDate">
+		<xen:if is="{$message.user_id} == {$message.last_edit_user_id}">
+			{xen:phrase last_edited}: <xen:datetime time="{$message.last_edit_date}" /><br/>
+			<xen:if is="{$post.post_edit_reason_th}">
+				{xen:phrase th_reason_for_edit_posteditreason}: {$post.post_edit_reason_th}
+			</xen:if>
+		<xen:else />
+			{xen:phrase last_edited_by_moderator}: <xen:datetime time="{$message.last_edit_date}" /><br/>
+			<xen:if is="{$post.post_edit_reason_th}">
+				{xen:phrase th_reason_for_edit_posteditreason}: {$post.post_edit_reason_th}
+			</xen:if>
+		</xen:if>
+	</div>
+</xen:if>]]></template>
+    <template title="th_post_edit_reason_posteditreason" version_id="1412542746" version_string="1.0.0"><![CDATA[<dl class="ctrlUnit secondaryContent">
+	<dt><label for="post_edit_reason_th">{xen:phrase th_post_edit_reason_posteditreason}:</label></dt>
+	<dd><input type="text" name="post_edit_reason_th" value="{$post.post_edit_reason_th}" id="post_edit_reason_th" class="textCtrl" style="width:500px;"/></dd>
+</dl>]]></template>
+  </templates>
+  <public_template_modifications>
+    <modification template="footer" modification_key="th_copyrightNotice_postEditReason" description="Copyright notice for [⌂] Post Edit Reason" execution_order="1" enabled="1" action="callback">
+      <find><![CDATA[/{xen:phrase (?:xenforo|extra)_copyright}/]]></find>
+      <replace><![CDATA[ThemeHouse_Listener_InitDependencies::copyrightNotice]]></replace>
+    </modification>
+    <modification template="helper_edit_silent" modification_key="th_helperEditSilent_edidpostreason" description="Adds edit reason text box." execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#(<dd><ul>)#Us]]></find>
+      <replace><![CDATA[${0}
+<xen:include template="th_helper_edit_silent_posteditreason" />]]></replace>
+    </modification>
+    <modification template="post_edit_inline" modification_key="th_postEditInline_posteditreason" description="Adds post edit reason to the form" execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#(<div class="primaryContent messageContainer">.*</div>)#Us]]></find>
+      <replace><![CDATA[${0}
+<xen:if is="!{$canSilentEdit}">
+<xen:include template="th_post_edit_reason_posteditreason" />
+</xen:if>]]></replace>
+    </modification>
+    <modification template="post_edit" modification_key="th_postEdit_posteditreason" description="Adds post edit reason field" execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#(<dd>{xen:raw \$editorTemplate}</dd>\s*</dl>\s*</fieldset>)#Us]]></find>
+      <replace><![CDATA[${0}
+<xen:if is="!{$canSilentEdit}">
+<xen:include template="th_post_edit_reason_posteditreason" />
+</xen:if>]]></replace>
+    </modification>
+    <modification template="message" modification_key="th_post_posteditreason" description="Adds in post edit reason if required" execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#(<div class="editDate">.*</div>)#Us]]></find>
+      <replace><![CDATA[<xen:if is="{$canViewPostEditNotice}">
+<xen:include template="th_message_posteditreason" />
+</xen:if>]]></replace>
+    </modification>
+  </public_template_modifications>
+  <bb_code_media_sites/>
+  <bb_codes/>
+</addon>
